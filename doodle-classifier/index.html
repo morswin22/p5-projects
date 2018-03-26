@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Doodle classifier</title>
+
+    <script src="../.libs/p5/p5.min.js"></script>
+    <script src="../.libs/p5/addons/p5.dom.min.js"></script>
+    <!-- <script src="../.libs/p5/addons/p5.sound.min.js"></script> -->
+
+    <!-- <script src="../.libs/matter/matter.min.js"></script> -->
+    
+    <script src="../.libs/train/p5-loadbytes.js"></script>
+    <script src="../.libs/train/matrix.js"></script>
+    <script src="../.libs/train/nn.js"></script>
+
+    <script src="traintest.js"></script>
+    <script src="dataprep.js"></script>
+    <script src="sketch.js"></script>
+
+    <style>
+        button{
+            font-size: 24pt;
+            margin: 10px;
+        }
+        canvas{
+            display: block;
+            border: thick solid black;
+        }
+    </style>
+</head>
+<body>
+    
+    <button id="train">train</button>
+    <button id="test">test</button>
+    <button id="guess">guess</button>
+    <button id="clear">clear</button>
+
+</body>
+</html>
