@@ -2,12 +2,15 @@ let n = 0;
 let c = 5;
 let av = 137.5;
 
+let maxd;
+
 function setup() {
     createCanvas(600, 600);
     background(51);
     angleMode(DEGREES);
     colorMode(HSB);
     av = getParameterByName('a') || av;
+    maxd = sqrt(((width/2)**2) + ((height/2)**2));
 }
 
 function getParameterByName(name, url) {
@@ -28,9 +31,9 @@ function draw() {
     let x = r * cos(a) + width/2;
     let y = r * sin(a) + height/2;
 
-    let col = map(r,0,width/2,0,359);
+    let col = map(r,0,maxd,0,359);
 
-    fill(col, 250, 250);
+    fill(col, 256, 256);
     noStroke();
     ellipse(x,y,5,5);
 
