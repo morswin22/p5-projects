@@ -30,7 +30,7 @@ function draw() {
 
     let col = map(r,0,width/2,0,359);
 
-    fill(col, 360, 360);
+    fill(col, 250, 250);
     noStroke();
     ellipse(x,y,5,5);
 
