@@ -1,37 +1,22 @@
 let circles = [];
-let spots = [];
 
 let img;
 
 function preload() {
-    img = loadImage('2017.jpg');
+    img = loadImage('kitten.jpg');
 }
 
 function setup() {
-    createCanvas(592, 331);
+    createCanvas(600, 600);
 
     img.loadPixels();
-    for (let i = 0; i < img.pixels.length; i+=4) {
-        let c = color(
-            img.pixels[i+0],
-            img.pixels[i+1],
-            img.pixels[i+2],
-            img.pixels[i+3]
-        );
-        let b = brightness(c);
-        if (b > 1) {
-            let x = (i/4) % img.width;
-            let y = ((i/4)-x) / img.height/2;
-            spots.push(createVector(x,y));
-        }
-    }
 
 }
 
 function draw() {
     background(51);
 
-    let total = 10;
+    let total = 25;
     let count = 0;
     let attempts = 0;
     while(count < total) {
@@ -55,10 +40,9 @@ function draw() {
 }
 
 function createCircle() {
-    let spot = random(spots);
-    if (!spot) return false;
-    let x = spot.x;
-    let y = spot.y;
+
+    let x = random(width);
+    let y = random(height);
 
     let valid = true;
     for(let circle of circles) {
@@ -70,7 +54,14 @@ function createCircle() {
     }
     
     if (valid) {
-        return new Circle(x, y);
+        let index = floor(x)*4 + floor(y) * img.width * 4;
+        let col = color(
+            img.pixels[index+0],
+            img.pixels[index+1],
+            img.pixels[index+2],
+            img.pixels[index+3],
+        );
+        return new Circle(x, y, col);
     }
     return false;
 }
