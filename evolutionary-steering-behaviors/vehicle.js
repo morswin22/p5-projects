@@ -1,5 +1,7 @@
+let mr = 0.01;
+
 class Vehicle {
-    constructor(x, y) {
+    constructor(x, y, dna) {
       this.acceleration = createVector(0, 0);
       this.velocity = createVector(0, -2);
       this.position = createVector(x, y);
@@ -9,10 +11,33 @@ class Vehicle {
 
       this.health = 1;
 
-      this.dna = [
-          random(-5,5),
-          random(-5,5)
-      ];
+      this.dna = [];
+      if (dna === undefined) {
+        this.dna = [
+            random(-2,2), // food weight
+            random(-2,2), // poison weight
+            random(100), // food perception
+            random(100), // poison perception
+        ];
+      } else {
+          this.dna[0] = dna[0];
+          if (random(1) < mr) {
+              this.dna[0] += random(-0.1,0.1);
+          }
+          this.dna[1] = dna[1];
+          if (random(1) < mr) {
+              this.dna[1] += random(-0.1,0.1);
+          }
+
+          this.dna[2] = dna[2];
+          if (random(1) < mr) {
+              this.dna[2] += random(-10,10);
+          }
+          this.dna[3] = dna[3];
+          if (random(1) < mr) {
+              this.dna[3] += random(-10,10);
+          }
+      }
     }
   
     // Method to update location
@@ -39,8 +64,8 @@ class Vehicle {
     }
 
     behaviors(good, bad) {
-        let steerG = this.eat(good, 0.1);
-        let steerB = this.eat(bad, -0.5);
+        let steerG = this.eat(good, 0.3, this.dna[2]);
+        let steerB = this.eat(bad, -0.75, this.dna[3]);
 
         steerG.mult(this.dna[0]);
         steerB.mult(this.dna[1]);
@@ -49,22 +74,35 @@ class Vehicle {
         this.applyForce(steerB);
     }
 
-    eat(list,nutrition) {
-        let record = Infinity;
-        let closestIndex = -1;
-        list.forEach((e,i)=>{
-            let d = this.position.dist(e);
-            if (d < record) {
-                record = d;
-                closestIndex = i;
-            }
-        });
+    clone() {
+        if (random(1) < 0.005) {
+            return new Vehicle(this.position.x, this.position.y, this.dna);
+        } else {
+            return null;
+        }
+    }
 
-        if (record < 5) {
-            list.splice(closestIndex, 1);
-            this.health += nutrition;
-        } else if (closestIndex > -1) {
-            return this.seek(list[closestIndex]);
+    eat(list,nutrition, perception) {
+        let record = Infinity;
+        let closest = null;
+        for (let i = list.length-1; i >= 0; i--) {
+            let e = list[i];
+            let d = this.position.dist(e);
+
+            if (d < this.maxspeed) {
+                list.splice(i, 1);
+                this.health += nutrition;
+            } else {
+                if (d < record && d < perception) {
+                    record = d;
+                    closest = list[i];
+                }
+            }
+
+        }
+
+        if (closest != null) {
+            return this.seek(closest);
         }
 
         return createVector(0,0);
@@ -87,6 +125,32 @@ class Vehicle {
       //this.applyForce(steer);
       return steer;
     }
+
+  boundaries() {
+
+    let desired = null;
+    let d = 25;
+
+    if (this.position.x < d) {
+      desired = createVector(this.maxspeed, this.velocity.y);
+    } else if (this.position.x > width - d) {
+      desired = createVector(-this.maxspeed, this.velocity.y);
+    }
+
+    if (this.position.y < d) {
+      desired = createVector(this.velocity.x, this.maxspeed);
+    } else if (this.position.y > height - d) {
+      desired = createVector(this.velocity.x, -this.maxspeed);
+    }
+
+    if (desired !== null) {
+      desired.normalize();
+      desired.mult(this.maxspeed);
+      let steer = p5.Vector.sub(desired, this.velocity);
+      steer.limit(this.maxforce);
+      this.applyForce(steer);
+    }
+  }
   
     display() {
 
@@ -96,22 +160,31 @@ class Vehicle {
 
       // Draw a triangle rotated in the direction of velocity
       var theta = this.velocity.heading() + PI / 2;
-      fill(col);
-      stroke(col);
-      strokeWeight(1);
       push();
       translate(this.position.x, this.position.y);
       rotate(theta);
+
+      if (debug.checked()) {
+        strokeWeight(3);
+        stroke(0,255,0);
+        noFill();
+        line(0,0,0, -this.dna[0]*25);
+        strokeWeight(2);
+        ellipse(0,0,this.dna[2]*2);
+        stroke(255,0,0);
+        noFill();
+        line(0,0,0, -this.dna[1]*25);
+        ellipse(0,0,this.dna[3]*2);
+      }
+
+      
+      fill(col);
+      stroke(col);
       beginShape();
       vertex(0, -this.r * 2);
       vertex(-this.r, this.r * 2);
       vertex(this.r, this.r * 2);
       endShape(CLOSE);
-
-      stroke(0,255,0);
-      line(0,0,0, -this.dna[0]*20);
-      stroke(255,0,0);
-      line(0,0,0, -this.dna[1]*20);
 
       pop();
     }
