@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../.libs/turbojs/turbo.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gpu.js/1.2.0/gpu.min.js"></script> -->
+</head>
+<body>
+    
+    <script>
+
+        if(turbojs) {
+
+            let sampleSize = 1e6;
+            let sampleIterations = 1e3;
+            let testData = turbojs.alloc(sampleSize);
+
+            let start;
+
+            function testJS() {
+                for (var i = 0; i < sampleSize; i += 4) {
+                    var x0 = -2.5 + (3.5 * testData.data[i]);
+                    var y0 = testData.data[i + 1], x = 0, y = 0, xt = 0, c = 0;
+
+                    for (var n = 0; n < sampleIterations; n++) {
+                        if (x * x + y * y >= 2 * 2) break;
+
+                        xt = x * x - y * y + x0;
+                        y = 2 * x * y + y0;
+                        x = xt;
+                        c++;
+                    }
+
+                    var col = c / sampleIterations;
+
+                    testData.data[i + 2] = col;
+                }
+            }
+
+            function testTurbo() {
+                turbojs.run(testData, `void main(void) {
+                    vec4 ipt = read();
+
+                    float x0 = -2.5 + (3.5 * ipt.r);
+                    float y0 = ipt.g, x, y, xt, c;
+
+                    for(int i = 0; i < ${sampleIterations}; i++) {
+                        if (x * x + y * y >= 2. * 2.) break;
+
+                        xt = x * x - y * y + x0;
+                        y = 2. * x * y + y0;
+                        x = xt;
+                        c++;
+                    }
+
+                    float col = c / ${sampleIterations}.;
+
+                    commit(vec4(ipt.rg, col, 0.));
+                }`);
+            }
+
+            // GPU
+            for (var i = 0; i < sampleSize; i += 4) {
+                testData.data[i] = Math.random();
+                testData.data[i + 1] = Math.random();
+            }
+            start = new Date();
+            testTurbo();
+            let turboResult = new Date() - start;
+            console.log('And it took',turboResult,'ms for GPU');
+
+
+            // CPU
+            for (var i = 0; i < sampleSize; i += 4) {
+                testData.data[i] = Math.random();
+                testData.data[i + 1] = Math.random();
+            }
+            start = new Date();
+            testJS();
+            let jsResult = new Date() - start;
+            console.log('And it took',jsResult,'ms for CPU');
+
+            let delta = jsResult/turboResult;
+            if (delta > 1) {
+                console.log('GPU is better than CPU by '+parseInt(delta*100)+'%');
+            } else {
+                console.log('CPU is better than GPU by '+parseInt(turboResult/jsResult*100)+'%');
+            }
+            
+        }
+
+        // function matMultCPU(a, b) {
+        //     var aNumRows = a.length, aNumCols = a[0].length,
+        //         bNumRows = b.length, bNumCols = b[0].length,
+        //         m = new Array(aNumRows);  // initialize array of rows
+        //     for (var r = 0; r < aNumRows; ++r) {
+        //         m[r] = new Array(bNumCols); // initialize the current row
+        //         for (var c = 0; c < bNumCols; ++c) {
+        //             m[r][c] = 0;             // initialize the current cell
+        //             for (var i = 0; i < aNumCols; ++i) {
+        //                 m[r][c] += a[r][i] * b[i][c];
+        //             }
+        //         }
+        //     }
+        //     return m;
+        // }
+
+        // const size = 1024;
+
+        // const gpu = new GPU();    
+        // const matMultGPU = gpu.createKernel(function(a,b) {
+        //     let sum = 0;
+        //     for (let i = 0; i < b[0].length; i++) {
+        //         sum += a[this.thread.y][i] * b[i][this.thread.x];
+        //     }
+        //     return sum;
+        // }).setOutput([1024,1024]);
+
+        // let a = [];
+        // let b = [];
+        // for (let i = 0; i < size; i++) {
+        //     a[i] = [];
+        //     b[i] = [];
+        //     for (let y = 0; y < size; y++) {
+        //         a[i][y] = Math.random();
+        //         b[i][y] = Math.random();
+        //     }
+        // }
+
+        // // console.log('CPU GO!');
+        // // let startC = new Date();
+        // // let cC = matMultCPU(a,b);
+        // // let stopC = new Date() - startC;
+        // // console.log('CPU FINISHED after', stopC);
+        
+        // // console.log('GPU GO!');
+        // // let startG = new Date();
+        // // const cG = matMultGPU(a, b);
+        // // let stopG = new Date() - startG;
+        // // console.log('GPU FINISHED after', stopG);
+
+        // function matMult(a,b) {
+        //     const calc = gpu.createKernel(function(a,b) {
+        //         let sum = 0;
+        //         for (let i = 0; i < 1024; i++) {
+        //             sum += a[this.thread.y][i] * b[i][this.thread.x];
+        //         }
+        //         return sum;
+        //     }).setOutput([a.length, b.length]);
+        //     return calc(a,b);
+        // }
+
+        // console.log(matMult(a,b));
+
+        // console.log(matMult([3,5,3],[5,5]))
+        // console.log(matMultCPU([3,5,3],[5,5,3]));
+
+    </script>
+
+</body>
+</html>
