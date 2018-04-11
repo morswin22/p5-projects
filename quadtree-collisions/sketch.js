@@ -24,7 +24,7 @@ function draw() {
     qtree = new QuadTree(boundary, 4);
 
     for (let p of particles) {
-        qtree.insert(new Point(p.x, p.y, p));
+        qtree.insert(p);
         p.move();
         p.render();
         p.setHighlight(false);
@@ -35,8 +35,7 @@ function draw() {
         for (let p of particles) {
             let others = qtree.query(new Circle(p.x, p.y, p.r*2));
             for (let other of others) {
-                other = other.userData;
-                if (p !== other && p.intersects(other)) {
+                if (p !== other && p.contains(other)) {
                     p.setHighlight(true);
                 }
             }
@@ -45,7 +44,7 @@ function draw() {
         // NORMAL
         for (let p of particles) {
             for (let other of particles) {
-                if (p !== other && p.intersects(other)) {
+                if (p !== other && p.contains(other)) {
                     p.setHighlight(true);
                 }
             }

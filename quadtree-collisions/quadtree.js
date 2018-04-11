@@ -1,45 +1,67 @@
-class Point {
-    constructor (x, y, userData) {
+class Shape {
+    constructor(x,y) {
         this.x = x;
         this.y = y;
-        this.userData = userData;
+        this.type = 'shape';
     }
 }
 
-class Rectangle {
+class Rectangle extends Shape {
     constructor(x,y,w,h) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
         this.w = w;
         this.h = h;
+        this.type = 'rectangle';
     }
 
-    contains(point) {
-        return (point.x >= this.x - this.w &&
-            point.x <= this.x + this.w &&
-            point.y >= this.y - this.h &&
-            point.y <= this.y + this.h);
+    contains(shape) {
+        switch(shape.type) {
+            case 'circle':
+                return (shape.x >= this.x - this.w &&
+                    shape.x <= this.x + this.w &&
+                    shape.y >= this.y - this.h &&
+                    shape.y <= this.y + this.h);
+                break;
+            case 'rectangle':
+                break;
+            case 'shape':
+                return (shape.x >= this.x - this.w &&
+                    shape.x <= this.x + this.w &&
+                    shape.y >= this.y - this.h &&
+                    shape.y <= this.y + this.h);
+                break;
+        }
     }
 
-    intersects(range) {
-        return !(range.x - range.w > this.x + this.w ||
-            range.x + range.w < this.x - this.w ||
-            range.y - range.h > this.y + this.h ||
-            range.y + range.h < this.y - this.h);
+    intersects(rectangle) {
+        return !(rectangle.x - rectangle.w > this.x + this.w ||
+            rectangle.x + rectangle.w < this.x - this.w ||
+            rectangle.y - rectangle.h > this.y + this.h ||
+            rectangle.y + rectangle.h < this.y - this.h);
     }
 }
 
-class Circle {
+class Circle extends Shape {
     constructor(x, y, r) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
         this.r = r;
-        this.rSquared = this.r*this.r;
+        this.type = 'circle';
     }
 
-    contains(point) {
-        let d = Math.pow((point.x - this.x), 2) + Math.pow(point.y - this.y, 2);
-        return (d <= this.rSquared);
+    contains(shape) {
+        let d;
+        switch(shape.type) {
+            case 'circle':
+                d = Math.pow((shape.x - this.x), 2) + Math.pow(shape.y - this.y, 2);
+                return (d <= Math.pow(this.r+shape.r,2));
+                break;
+            case 'rectangle':
+                break;
+            case 'shape':
+                d = Math.pow((shape.x - this.x), 2) + Math.pow(shape.y - this.y, 2);
+                return (d <= Math.pow(this.r,2));
+                break;
+        }
     }
 }
 
