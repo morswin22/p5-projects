@@ -102,7 +102,7 @@ function draw() {
 
         textSize(25);
         textAlign(RIGHT, TOP);
-        text(new Date().getHours()+":"+fixFullTime(new Date().getMinutes()), 270, 25);
+        text(fixFullTime(new Date().getHours())+":"+fixFullTime(new Date().getMinutes()), 270, 25);
 
         textSize(12);
         textAlign(CENTER, TOP);
