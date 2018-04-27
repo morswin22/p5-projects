@@ -6,9 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sun Rise and Set</title>
 
-    <script src="../.libs/p5/p5.min.js"></script> 
-    <script src="sketch.js"></script>
-
     <style>
         html, body {
             margin: 0;
@@ -22,18 +19,17 @@
             grid-template-rows: auto 350px auto;
             grid-template-areas: 
                 '. . .'
-                '. canvas .'
+                '. iframe .'
                 '. . .';
         }
-        canvas {
-            grid-area: canvas;
+        iframe {
+            grid-area: iframe;
             align-self: center;
             justify-self: center;
-            opacity: 0.75;
         }
     </style>
 </head>
 <body>
-
+    <iframe src="https://morswin22.github.io/p5-projects/sun-rise-set/embed.html" width="300" height="350" style="border: 0" allow="geolocation"></iframe>
 </body>
 </html>
