@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sun Rise and Set</title>
+
+    <script src="../../.libs/p5/p5.min.js"></script> 
+    <script src="sketch.js"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+        }
+        body {
+            background: url('https://passions.com.au/wp-content/uploads/2016/12/sun.jpg') no-repeat;
+            background-size: cover;
+            display: grid;
+            grid-template-columns: auto 300px auto;
+            grid-template-rows: auto 350px auto;
+            grid-template-areas: 
+                '. . .'
+                '. canvas .'
+                '. . .';
+        }
+        canvas {
+            grid-area: canvas;
+            align-self: center;
+            justify-self: center;
+            opacity: 0.75;
+        }
+    </style>
+</head>
+<body>
+    
+</body>
+</html>
