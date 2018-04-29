@@ -10,7 +10,7 @@ git clone --recurse-submodules -j8 https://github.com/morswin22/p5-projects.git
 Links to libs:
 * p5
 ```html 
-<script src="../../.libs/p5/p5.min.js"></script> 
+<script src="../.libs/p5/p5.min.js"></script> 
 ```
 
 * p5.dom
@@ -37,6 +37,11 @@ Links to libs:
 ```html 
 <script src="../.libs/p5/addons/p5.gui.js"></script>
 <script src="../.libs/p5/addons/quicksettings.min.js"></script>
+```
+
+* TensorFlow.js
+```html
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.0"></script>
 ```
 
 * p5-loadbytes (from: Coding Train)
