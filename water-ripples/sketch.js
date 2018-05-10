@@ -50,7 +50,3 @@ function draw() {
         current[parseInt(random(width))][parseInt(random(height))] = 100;
     }
 }
-
-function mousePressed() {
-    current[mouseX][mouseY] = 100;
-}
