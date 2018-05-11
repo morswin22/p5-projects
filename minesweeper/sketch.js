@@ -13,10 +13,13 @@ let bombImg;
 let explosionImg;
 let flagImg;
 
+let bombSound;
+
 function preload() {
     bombImg = loadImage('bomb.png');
     explosionImg = loadImage('explosion.png');
     flagImg = loadImage('flag.png');
+    bombSound = loadSound('bomb.mp3');
 }
 
 function setup() {
@@ -50,8 +53,14 @@ function mousePressed() {
     for (let col of grid) {
         for (let cell of col) {
             if (cell.contains(mouseX, mouseY)) {
-                if (!flagMode) cell.reveal();
-                if (flagMode) cell.flag();
+                if (!flagMode) {
+                    cell.reveal();
+                    if(cell.bomb) {
+                        bombSound.play();
+                    }
+                } else {
+                    cell.flag();
+                }
             };
         }
     }
