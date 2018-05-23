@@ -21,7 +21,7 @@ function setup() {
     if (q1) k1 = parseInt(q1);
     
     let q2 = getParameterByName('k2');
-    if (q2) k1 = parseInt(q2);
+    if (q2) k2 = parseInt(q2);
 
     f4 = new Orbit(width/2, height/2, 120, 0, undefined, k1, 'f4');
     f7 = new Orbit(width/2, height/2, 120, 0, undefined, k2, 'f7');
