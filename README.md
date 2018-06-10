@@ -41,7 +41,7 @@ Links to libs:
 
 * TensorFlow.js
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.10.3/tf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.11.4/tf.min.js"></script>
 ```
 
 * p5-loadbytes (from: Coding Train)
