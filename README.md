@@ -39,6 +39,11 @@ Links to libs:
 <script src="../lib/p5/addons/quicksettings.min.js"></script>
 ```
 
+* ml5
+```html
+<script src="https://unpkg.com/ml5" type="text/javascript"></script>
+```
+
 * TensorFlow.js
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.11.4/tf.min.js"></script>
