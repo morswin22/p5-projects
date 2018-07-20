@@ -1,17 +1,34 @@
+let attackLevel = 1.0;
+let releaseLevel = 0;
+
+let attackTime = 0.001;
+let decayTime = 0.2;
+let susPercent = 0.2;
+let releaseTime = 0.5;
+
 let numbers = [];
 let count = 1;
 let sequence = [];
 let index = 0;
-
 let scl = 0;
+let biggest = 1;
 
 let arcs = [];
 
-let biggest = 1;
+let osc, env;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    background(0);
+    frameRate(5);
+
+    env = new p5.Env();
+    env.setADSR(attackTime, decayTime, susPercent, releaseTime);
+    env.setRange(attackLevel, releaseLevel);
+
+    osc = new p5.Oscillator();
+    osc.setType('sine');
+    osc.amp(env);
+    osc.start();
 
     numbers[index] = true;
     sequence.push(index);
@@ -47,4 +64,9 @@ function step() {
     if (index > biggest) {
         biggest = index;
     }
+
+    let n = (index % 25) + 24;
+    let freq = pow(2, (n - 49) / 12) * 440;
+    osc.freq(freq);
+    env.play();
 }
