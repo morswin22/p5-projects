@@ -1,0 +1,24 @@
+canvas {
+    display: block;
+}
+
+button {
+    padding: 0.75em;
+    border:0;
+    border-radius: 20px;
+    font-size: 1em;
+    margin: 0.8em 0.5em;
+    cursor: pointer;
+}
+
+button.pink {
+    background-color: pink;
+}
+
+button.green {
+    background-color: #80ff00;
+}
+
+button.blue {
+    background-color: #00e0ff;
+}
