@@ -6,9 +6,9 @@ let mIsReady = false;
 let cIsReady = false;
 let label = 'Unloaded';
 
-let pinkBtn, pinkHold = false;
-let greenBtn, greenHold = false;
-let blueBtn, blueHold = false;
+let pinkBtn, pinkHold = false, pinkTotal = 0;
+let greenBtn, greenHold = false, greenTotal = 0;
+let blueBtn, blueHold = false, blueTotal = 0;
 let fm = 30; // frames max
 let fd = 0;  // frames delta
 
@@ -42,9 +42,9 @@ function setup() {
         cIsReady = true;
     });
 
-    pinkBtn  = createButton('Add').addClass('pink');
-    greenBtn = createButton('Add').addClass('green');
-    blueBtn  = createButton('Add').addClass('blue');
+    pinkBtn  = createButton('0').addClass('pink');
+    greenBtn = createButton('0').addClass('green');
+    blueBtn  = createButton('0').addClass('blue');
 
     pinkBtn.mousePressed(()=>{pinkHold = true;});
     greenBtn.mousePressed(()=>{greenHold = true;});
@@ -65,6 +65,8 @@ function setup() {
                 isTraining = true;
                 label = `Calculating loss: ${e}`;
             }
+        }).catch(e=>{
+            label = e;
         });
     });
     
@@ -74,9 +76,21 @@ function draw() {
     background(0);
     image(video, 0, 0, 640, 480);
 
-    if (pinkHold&&fd==1)  classifier.addImage('pink');
-    if (greenHold&&fd==1) classifier.addImage('green');
-    if (blueHold&&fd==1)  classifier.addImage('blue');
+    if (pinkHold&&fd==1)  {
+        pinkTotal++;
+        pinkBtn.html(pinkTotal);
+        classifier.addImage('pink');
+    }
+    if (greenHold&&fd==1) {
+        greenTotal++;
+        greenBtn.html(greenTotal);
+        classifier.addImage('green');
+    }
+    if (blueHold&&fd==1)  {
+        blueTotal++;
+        blueBtn.html(blueTotal);
+        classifier.addImage('blue');
+    }
 
     if (pinkHold || greenHold || blueHold) {
         fd = (fd+1) % fm;
@@ -110,7 +124,7 @@ function predict() {
             if(!err && !isTraining) {
                 label = res[0].className;
             } else {
-                console.error(err);
+                label = err;
                 noLoop();
             }
         });
