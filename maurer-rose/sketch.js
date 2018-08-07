@@ -34,6 +34,11 @@ function setup() {
     dSlider.changed(e=>{
         reset();
     });
+    
+    setInterval(()=>{
+        nSpan.innerHTML = nSlider.value();
+        dSpan.innerHTML = dSlider.value();
+    },100);
 
     toggleRose = createButton('Show Rose');
     toggleRose.mouseClicked(()=>{
