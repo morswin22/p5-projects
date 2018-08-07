@@ -120,9 +120,9 @@ function draw() {
 
 function predict() {
     if(mIsReady && cIsReady && pd == 1) {
-        mobilenet.classification((err, res)=>{
+        classifier.classify((err, res)=>{
             if(!err && !isTraining) {
-                label = res[0].className;
+                label = res;
             } else {
                 label = err;
                 noLoop();
